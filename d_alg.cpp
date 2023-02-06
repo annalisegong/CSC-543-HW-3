@@ -1,53 +1,84 @@
+//test branch
 #include <iostream>
 #include <vector>
+#include <string>
 #include <stdio.h>
 using namespace std;
 
-//adds edge = link between two nodes with its width
-void addEdge(vector <pair<int, int> > adjList[], int n, int N, int w)
+int minDistance(int distance[], bool visited[])
 {
-    //vector = sequence container that will store adjacency lists of ints
-    //pair = simple container to store pair of elements (node, width)
+    int min = INT_MAX;
+    int min_index;
 
-    //push_back function inserts new element at end of vector and ++1 vector size
-    //make_pair function initializes and assigns pair between two elements
-    adjList[n].push_back(make_pair(N, w));
-    adjList[N].push_back(make_pair(n, w));
+    for(int i = 0; i < 5; i++)
+    {
+        //checks ad
+        if(visited[i] == false && distance[i] <= min)
+        {
+            min = distance[i];
+            min_index = i;
+        }
+    }
+    return min_index;
 }
 
-void printGraph(vector<pair<int, int> > adjList[], int totalNodes)
+int printSolution(int distance[], int totalNodes)
 {
-    int N;
-    int w;
+    printf("Vertex      Distance from Source\n");
     for(int i = 0; i < totalNodes; i++)
     {
-        cout << "Node " << i << " has edge with \n";
-        //auto keyword defines type for me
-        for(auto it = adjList[i].begin(); it != adjList[i].end(); it++)
-        {
-            N = it->first; //first refers to first element in pair aka node name
-            w = it->second; //second refers to second element in pair
-            cout << "\tNode " << N << " with width = " << w << "\n";
-        }
-        cout << "\n";
+        printf("%d \t %d\n", i, distance[i]);
     }
+}
+
+void dijkstra(int graph[5][5], int initial)
+{
+    int distance[5]; //stores shortest distance from initial to terminal
+
+    bool visited[5]; //true if node is included in shortest distance path
+
+    //initially set all distances to infinity, and all nodes to false = not visited
+    for(int i = 0; i < 5; i++)
+    {
+        distance[i] = INT_MAX;
+        visited[i] = false;
+    }
+
+    distance[initial] = 0; //assign starting distance for initial node to 0
+
+    //find shortest path for all vertices
+    for(int count = 0; count < 4; count++)
+    {
+        int current = minDistance(distance, visited);
+
+        visited[current] = true;
+
+        //update distance value for adj nodes of current vertex
+        for(int i = 0; i < 5; i++)
+        {
+            // Update dist[i] only if is not in sptSet, there is an edge from
+            // current to i, and total weight of path from initial to i through current is
+            // smaller than current value of dist[i]
+            if(!visited[i] && graph[current][i] && distance[current] != INT_MAX
+            && distance[current] + graph[current][i] < distance[i])
+            {  
+                distance[i] = distance[current] + graph[current][i];
+            }
+        }
+    }
+    printSolution(distance, 5);
 }
 
 int main()
 {
-    int totalNodes = 5; // may need to change to 4
-    vector<pair<int, int> > adjList[totalNodes];
-    addEdge(adjList, 0, 1, 10);//A to B
-    addEdge(adjList, 0, 4, 3);//A to E
-    addEdge(adjList, 1, 2, 2);//B to C
-    addEdge(adjList, 1, 4, 4);//B to E
-    addEdge(adjList, 2, 3, 9);//C to D
-    addEdge(adjList, 3, 2, 7);//D to C
-    addEdge(adjList, 4, 1, 1);//E to B
-    addEdge(adjList, 4, 2, 8);//E to C
-    addEdge(adjList, 4, 3, 2);//E to D
-    printGraph(adjList, totalNodes);
-    cout << "done";
+    int graph[5][5] = {
+        {0,10,0,0,3},
+        {0,0,2,0,4},
+        {0,0,0,9,0},
+        {0,0,7,0,0},
+        {0,1,8,2,0}
+    };
+
+    dijkstra(graph, 0);
     return 0;
 }
-//issue

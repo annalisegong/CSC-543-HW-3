@@ -33,6 +33,11 @@ void printGraph(vector<pair<int, int> > adjList[], int totalNodes)
     }
 }
 
+int findShortestDistance(vector <pair<int, int> > adjList[], int i, int j)
+{
+    
+}
+
 int main()
 {
     int totalNodes = 5; // may need to change to 4
@@ -47,7 +52,16 @@ int main()
     addEdge(adjList, 4, 2, 8);//E to C
     addEdge(adjList, 4, 3, 2);//E to D
     printGraph(adjList, totalNodes);
-    cout << "done";
+
+    int startNode;
+    int endNode;
+    cout << "what is the starting node?";
+    cin >> startNode;
+    cout << "what is the end node?";
+    cin >> endNode;
+
+    findShortestPath(adjList, startNode, endNode); //run function to find shortest path
+
     return 0;
 }
 //issue
