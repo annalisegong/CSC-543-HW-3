@@ -12,7 +12,7 @@ int minDistance(int distance[], bool visited[])
 
     for(int i = 0; i < 5; i++)
     {
-        //checks ad
+        //checks adj node and returns index of adj node with shorter width
         if(visited[i] == false && distance[i] <= min)
         {
             min = distance[i];
@@ -24,12 +24,17 @@ int minDistance(int distance[], bool visited[])
 
 int printSolution(int distance[], int path[], int end)
 {
-    printf("Vertex      Distance from Starting Node\n");
+    cout << "Shortest Distance from Starting Node: ";
     for(int i = 0; i < 5; i++)
     {
         while(i == end)
         {
-            printf("%d \t\t %d\n", i, distance[i]);
+            cout << distance[i] << "\n";
+            cout << "Shortest Distance Path: ";
+            for(int j = 0; j < 5; j++)
+            {
+                cout << path[j] << ", ";
+            }
             return 0;
         }
     }
@@ -51,27 +56,34 @@ void dijkstra(int graph[5][5], int initial, int end)
     }
 
     distance[initial] = 0; //assign starting distance for initial node to 0
+    path[0]= initial; //all paths starts with initial node
 
     //find shortest path for all vertices
     for(int count = 0; count < 4; count++)
     {
         int current = minDistance(distance, visited);
-
         visited[current] = true;
-
-        //update distance value for adj nodes of current vertex
+        //update distance value for adj nodes of current node
         for(int i = 0; i < 5; i++)
         {
-            // Update dist[i] only if is not in sptSet, there is an edge from
+            // Update dist[i] only if is not in visited, there is an edge from
             // current to i, and total weight of path from initial to i through current is
             // smaller than current value of dist[i]
             if(!visited[i] && graph[current][i] && distance[current] != INT_MAX
             && distance[current] + graph[current][i] < distance[i])
             {  
                 distance[i] = distance[current] + graph[current][i];
-                path[i] = graph[current][i];
+                if(current == end)
+                {
+                    path[count + 1] = end;
+                }
+                else
+                {
+                    path[count+1] = i;
+                }
             }
         }
+        //after min distance is found, need to update path to include current node; x = 0;    }
     }
     printSolution(distance, path, end);
 }
