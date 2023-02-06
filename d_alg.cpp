@@ -22,20 +22,26 @@ int minDistance(int distance[], bool visited[])
     return min_index;
 }
 
-int printSolution(int distance[], int totalNodes)
+int printSolution(int distance[], int path[], int end)
 {
-    printf("Vertex      Distance from Source\n");
-    for(int i = 0; i < totalNodes; i++)
+    printf("Vertex      Distance from Starting Node\n");
+    for(int i = 0; i < 5; i++)
     {
-        printf("%d \t %d\n", i, distance[i]);
+        while(i == end)
+        {
+            printf("%d \t\t %d\n", i, distance[i]);
+            return 0;
+        }
     }
 }
 
-void dijkstra(int graph[5][5], int initial)
+void dijkstra(int graph[5][5], int initial, int end)
 {
     int distance[5]; //stores shortest distance from initial to terminal
 
     bool visited[5]; //true if node is included in shortest distance path
+
+    int path[5]; //stores shortest path order
 
     //initially set all distances to infinity, and all nodes to false = not visited
     for(int i = 0; i < 5; i++)
@@ -63,10 +69,11 @@ void dijkstra(int graph[5][5], int initial)
             && distance[current] + graph[current][i] < distance[i])
             {  
                 distance[i] = distance[current] + graph[current][i];
+                path[i] = graph[current][i];
             }
         }
     }
-    printSolution(distance, 5);
+    printSolution(distance, path, end);
 }
 
 int main()
@@ -79,6 +86,14 @@ int main()
         {0,1,8,2,0}
     };
 
-    dijkstra(graph, 0);
+    cout << "choose a starting node: 0,1,2,3,4\n";
+    int initial;
+    cin >> initial;
+
+    cout << "choose an ending node: 0,1,2,3,4\n";
+    int end;
+    cin >> end;
+
+    dijkstra(graph, initial, end);
     return 0;
 }
