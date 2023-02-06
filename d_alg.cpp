@@ -83,7 +83,7 @@ void dijkstra(int graph[5][5], int initial, int end)
                 }
             }
         }
-        //after min distance is found, need to update path to include current node; x = 0;    }
+        //after min distance is found, need to update path to include current node;
     }
     printSolution(distance, path, end);
 }
